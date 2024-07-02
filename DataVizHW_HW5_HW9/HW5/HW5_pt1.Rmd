@@ -1,0 +1,129 @@
+---
+title: "HW5"
+author: "Emma Horton"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(ggplot2)
+```
+
+Part 1
+```{r}
+getwd()
+path <- file.path( "/Users/emmahorton/DataScience/DataViz/datasets/Sharks.csv")
+sharks <- read.csv(path)
+head(sharks)
+```
+
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point(color = "blue") +
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size")
+  
+  p + theme_dark()
+```
+
+Part 2
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point(aes(color = factor(Genus))) +
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size")
+  
+  p + theme_dark()
+```
+
+Part 3
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point(aes(color = factor(Genus), shape = factor(Sex))) +
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size",
+       color = "Genus",
+       shape = "Sex")
+  
+  p + theme_dark()
+```
+
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point(aes(color = factor(Genus), shape = factor(Sex))) +
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size",
+       color = "Genus",
+       shape = "Sex")
+
+p <- p + 
+  xlim(min(sharks$BodyLength) - 10, max(sharks$BodyLength) + 10) +
+  ylim(min(sharks$ToothSize) - 10, max(sharks$ToothSize) + 10)
+
+BigGirlShark <- sharks[sharks$Sex == "F" & sharks$BodyLength > 550 & sharks$ToothSize > 40, ]
+
+p <- p + 
+  geom_text(data = BigGirlShark, aes(label = paste(Genus, Species, sep = " "), vjust = -0.9, hjust = 0.9), size = 2, color = "red")
+
+p
+
+```
+
+Part 5
+The line does appear to capture the relationship generally but we see that there are a number of points that are not following the trend line likely due to genus of the shark.
+
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point(color = "blue") +
+  stat_smooth(method = "lm",
+              col = "#C42126") +
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size")
+  
+  p + theme_dark()
+```
+
+Part 6
+We now see that more of the points fall within the standard error parameters becasue the tooth lenghth is relative to the genus of the shark in addition to the size
+```{r}
+p <- ggplot(sharks, aes(BodyLength, ToothSize, color = factor(Genus))) +
+  geom_point() +
+  stat_smooth(method = "lm") +  
+  labs(title = "Body Length vs. Tooth Size", 
+       x = "Body Length",
+       y = "Tooth Size",
+       color = "Genus") +
+  theme_dark()
+
+p
+
+```
+
+```{r}
+sharks$Genus <- factor(sharks$Genus)
+
+p <- ggplot(sharks, aes(BodyLength, ToothSize)) +
+  geom_point() +
+  geom_smooth(method = "lm") +  
+  labs(title = "Body Length vs. Tooth Size by Genus", 
+       x = "Body Length",
+       y = "Tooth Size") +
+  facet_wrap(~ Genus) +  
+  theme_dark()
+
+p
+
+```
+

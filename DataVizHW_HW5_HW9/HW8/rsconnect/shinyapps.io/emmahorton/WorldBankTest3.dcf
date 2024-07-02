@@ -1,0 +1,12 @@
+name: WorldBankTest3
+title: WorldBankTest3
+username: emmahorton
+account: emmahorton
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12245273
+bundleId: 8797275
+url: https://emmahorton.shinyapps.io/WorldBankTest3/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

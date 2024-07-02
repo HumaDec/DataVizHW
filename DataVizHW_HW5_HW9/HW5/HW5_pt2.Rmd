@@ -1,0 +1,58 @@
+---
+title: "HW5"
+author: "Emma Horton"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(ggplot2)
+library(tidyverse)
+library(stringr)
+```
+
+Task 1: Seperating on Species / Genus
+```{r}
+getwd()
+path <- file.path( "/Users/emmahorton/DataScience/DataViz/datasets/SharksOriginalDataset.csv")
+sharks <- read.csv(path)
+head(sharks)
+#distinct(sharks, sharks$Species)
+#distinct(sharks, sharks$Specimen..sex..side.)
+
+```
+
+```{r}
+sharks <- sharks %>%
+  mutate(
+    Genus = str_split_fixed(Species, " ", 2)[, 1],
+    Species = str_split_fixed(Species, " ", 2)[, 2]
+  ) %>%
+  select(Genus, Species, Specimen..sex..side., TL, A1)  
+
+print(sharks)
+
+```
+Task 2: Seperating on sex
+
+```{r}
+sharks <- sharks %>%
+  mutate(
+    Sex = case_when(
+      str_detect(Specimen..sex..side., "\\bF[?;]") ~ "F", 
+      str_detect(Specimen..sex..side., "\\bM[?;]") ~ "M",   
+      TRUE ~ NA_character_                                 
+    )
+  ) %>%
+  select(Genus, Species, Sex, TL, A1)
+
+sharks
+```
+
